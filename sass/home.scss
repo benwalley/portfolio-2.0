@@ -1,0 +1,24 @@
+
+$background:radial-gradient(#0f0f0f, #333333);
+$nameFontColor: white;
+$titleFont:'Julius Sans One', sans-serif;
+
+body{
+	margin:0;
+	overflow:hidden;
+
+	*{
+		box-sizing: border-box;
+	}
+}
+
+#mainCanvas{
+	background:$background;
+
+
+	width:100%;
+	height:100%;
+}
+
+
+
