@@ -3,6 +3,16 @@ $background:radial-gradient(#0f0f0f, #333333);
 $nameFontColor: white;
 $titleFont:'Julius Sans One', sans-serif;
 
+@mixin threeDtext($color){
+	color: $color;
+	text-shadow:
+	    0 1px 0 lighten($color, 15%),
+	    0 2px 0 lighten($color, 18%),
+	    0 3px 0 lighten($color, 22%),
+	    0 4px 0 lighten($color, 25%),
+
+}
+
 body{
 	margin:0;
 	overflow:hidden;
@@ -20,5 +30,111 @@ body{
 	height:100%;
 }
 
+.mainName{
+	position:absolute;
+	width:100vw;
+	text-align:center;
+	font-size:8em;
+	font-family: $titleFont;
+	text-transform:uppercase;
+	margin-top:40vh;
+	color:white;
+	@include threeDtext(#424242);
+	-webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease; 
+
+
+}
+
+.upArrow{
+	position:absolute;
+	text-align:center;
+	top:0;
+	left:45vw;
+	width:10vw;
+	color:white;
+	font-size:3em;
+	padding-top:1vh;
+	transition: top 2s ease ;
+
+}
+
+.scrollPrompt{
+	position:absolute;
+	text-align:center;
+	top:10.5vh;
+	left:45vw;
+	width:10vw;
+	color:#ececec;
+	font-size:1.1rem;
+	font-family:$titleFont;
+	font-weight:bold;
+	text-transform:uppercase;
+	-webkit-transition: all 2s ease;
+    -moz-transition: all 2s ease;
+    -o-transition: all 2s ease;
+    transition: all 2s ease; 
+	  
+
+}
+
+
+
+.upArrow{
+	-moz-animation: bounce 2s infinite;
+	-webkit-animation: bounce 2s infinite;
+	animation: bounce 2s infinite;
+}
+
+@-moz-keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    -moz-transform: translateY(0);
+    transform: translateY(0);
+  }
+  40% {
+    -moz-transform: translateY(20px);
+    transform: translateY(20px);
+  }
+  60% {
+    -moz-transform: translateY(10px);
+    transform: translateY(10px);
+  }
+}
+@-webkit-keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  40% {
+    -webkit-transform: translateY(20px);
+    transform: translateY(20px);
+  }
+  60% {
+    -webkit-transform: translateY(10px);
+    transform: translateY(10px);
+  }
+}
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  40% {
+    -moz-transform: translateY(20px);
+    -ms-transform: translateY(20px);
+    -webkit-transform: translateY(20px);
+    transform: translateY(20px);
+  }
+  60% {
+    -moz-transform: translateY(10px);
+    -ms-transform: translateY(10px);
+    -webkit-transform: translateY(10px);
+    transform: translateY(10px);
+  }
+}
 
 

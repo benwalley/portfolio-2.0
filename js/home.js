@@ -2,16 +2,25 @@ var projectBox = $(".projectBox");
 var drawing = true;
 var c = document.getElementById("mainCanvas");
 var ctx = c.getContext("2d");
+
+var arrow = $(".upArrow")[0]
+var prompt = $(".scrollPrompt")[0]
+var mainName = $(".mainName")[0]
+
 // center X/Y are real center, sx/sy are simulated center x and y
 var cData = {centerX: undefined, centerY: undefined, sx: undefined, sy: undefined};
 // numberSquares - number of squares drawn, lineDepth - in percent of screen, speed - in seconds
-var tunnelData = {numberSquares:10, lineDepth: .40, speed:5, lineColor: "#888888", maxLinePos:20, websiteLength: 100, lineSpacing: 3, turnPercent:.2}
+var tunnelData = {numberSquares:10, lineDepth: .40, speed:5, lineColor: "#888888", maxLinePos:20, websiteLength: 1000, lineSpacing: 3, turnPercent:.2}
 var tunnelSquares = []
 var baseSquare = {}
-var camera = {z: 0, rotX: 0, rotY: 0}
+var links = [{name: "projects", linkTo: "#", z: 20, width: .25, height: .1}]
+var camera = {z: 0, rotX: 0, rotY: 0, min: 0, max: tunnelData.websiteLength, speed:.03, maxSpeed: .8, }
 var scrollPos = window.scrollY;
 var width = window.innerWidth
 var mouse = {}
+// times in frames
+var intro = false;
+
 
 
 
@@ -110,6 +119,46 @@ function drawTunnel(){
 	
 }
 
+
+function introAnim(){
+	arrow.style.top = "-30vh"
+	prompt.style.top = "-20vh"
+
+	mainName.style.marginTop = "150vh"
+	camera.speed = .7
+	// wait for time and then set interval
+	window.setTimeout(function(){
+		var introInterval = window.setInterval(function(){
+			if(camera.speed > .12){
+				camera.speed -= .08
+			}else{
+				camera.speed = 0;
+				window.clearInterval(introInterval)
+			}
+			console.log("going")
+		}, 100)
+	}, 600)
+	
+}
+
+function zoom(time){
+	camera.direction = "up";
+	var speed = camera.maxSpeed/(time/200)
+	var zoomInt = window.setInterval(function(){
+		if(camera.speed < camera.maxSpeed && camera.direction == "up"){
+			camera.speed += speed
+		}else if(camera.speed >= camera.maxSpeed && camera.direction == "up"){
+			camera.direction = "down"
+		}else if(camera.direction == "down" && camera.speed > speed){
+			camera.speed -= speed
+		}else if(camera.speed <=  speed){
+			camera.speed = 0
+			clearInterval(zoomInt)
+		}
+
+	},100)
+}
+
 // canvas drawing
 // =================================
 var draw = new Object;
@@ -166,19 +215,33 @@ draw.centerSquare = function(data){
 	ctx.stroke();
 }
 
+draw.gradient = function(){
+
+}
+
 // LISTENERS
 // SCROLL LISTENER
 window.addEventListener("wheel", function(e){
 	if(e.deltaY < 0){
 		// scrolled up
+		if(!intro){
+			introAnim()
+			intro = true
+		}
 		console.log(scrollPos)
 		scrollPos += 1
-		camera.z += 1
+		if(camera.z < camera.max - camera.speed){
+			camera.z += camera.speed
+		}
+		
 	}else if(e.deltaY > 0){
 		// scrolled down
 		console.log(scrollPos)
 		scrollPos -= 1
-		camera.z -= 1
+		if(camera.z > camera.min + camera.speed){
+			camera.z -= camera.speed
+		}
+		
 	}	
 })
 
@@ -202,9 +265,11 @@ window.addEventListener("mousemove", function(e){
 
 function drive(){
 	if(camera.z < tunnelData.websiteLength){
-		camera.z += .05
+		camera.z += camera.speed
 	}
 }
+
+
 
 
 
@@ -212,13 +277,20 @@ function drive(){
 
 function drawer(){
 	ctx.clearRect(0, 0, c.width, c.height);
-	// drive()
+
+
+	drive()
 
 	drawTunnel();
+
 
 	if(drawing){
 		window.requestAnimationFrame(drawer)
 	}
+	
+
+	
+
 };
 
 // initialize page
